@@ -36,6 +36,7 @@ ncs_add_partition_manager_config(pm.yml.lwm2m_carrier)
 zephyr_include_directories(include)
 zephyr_library()
 zephyr_library_sources(
-  os/lwm2m_carrier.c
+  # disable nrf supplied lwm2m_carrier in favor of our own
+  # os/lwm2m_carrier.c
   os/lwm2m_os.c
 )
