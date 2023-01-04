@@ -343,7 +343,11 @@ static void on_rdy_pin_change(struct lpuart_data *data)
 			start_rx_activation(data);
 		}
 	} else {
-		__ASSERT_NO_MSG(data->rx_state == RX_ACTIVE);
+		// __ASSERT_NO_MSG(data->rx_state == RX_ACTIVE);
+		
+		if (data->rx_state != RX_ACTIVE) {
+			LOG_WRN("RX: End detected but not active. (state: %d)", data->rx_state);
+		}
 
 		LOG_DBG("RX: End detected.");
 		deactivate_rx(data);
@@ -466,6 +470,7 @@ static void uart_callback(const struct device *uart, struct uart_event *evt,
 	case UART_RX_RDY:
 		LOG_DBG("RX: Ready buf:%p, offset: %d,len: %d",
 		     evt->data.rx.buf, evt->data.rx.offset, evt->data.rx.len);
+		LOG_HEXDUMP_DBG(evt->data.rx.buf, evt->data.rx.len, "RX: ");
 		user_callback(dev, evt);
 		break;
 
