@@ -371,7 +371,13 @@ static void deactivate_rx(struct lpuart_data *data)
 static void tx_complete(struct lpuart_data *data)
 {
 	LOG_DBG("TX completed, pin idle");
-	pend_req_pin_idle(data);
+	if (data->tx_active) {
+		pend_req_pin_idle(data);
+	} else {
+		req_pin_set(data);
+	}
+
+	req_pin_idle(data);
 	data->tx_buf = NULL;
 	data->tx_active = false;
 }
